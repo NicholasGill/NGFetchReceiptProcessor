@@ -10,10 +10,13 @@ def processReceipts():
     id = ReceiptProcessorAPIHelper.generateIDasString()
     receiptIDMap[id] = request.get_json()
     print(receiptIDMap[id])
-    return id
+    return {"id": id}
 
 @app.get("/receipts/<string:id>/points")
-def getReceiptPointsId():
+def getReceiptPointsId(id):
     #TODO
-    return None
+    print(id)
+    points = ReceiptProcessorAPIHelper.calculateReceiptPoints(receiptIDMap[id])
+    return {"points": points}
+     
 

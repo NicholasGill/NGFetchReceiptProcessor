@@ -7,7 +7,6 @@ def generateIDasString():
     return str(uuid.uuid4())
 
 def calculateReceiptPoints(receipt: dict[str, str | list]):
-    #TODO
     totalPoints = 0
     totalPoints += pointsFromName(receipt["retailer"])
     totalPoints += pointsFromTotalPrice(receipt["total"])
@@ -15,9 +14,6 @@ def calculateReceiptPoints(receipt: dict[str, str | list]):
     totalPoints += pointsFromDate(receipt["purchaseDate"])
     totalPoints += pointsFromTime(receipt["purchaseTime"])
     return totalPoints
-
-
-#These could go into a different file
 
 def pointsFromName(retailerName: str):
     return len(re.findall('[A-zA-Z0-9]', retailerName))

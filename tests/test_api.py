@@ -1,8 +1,8 @@
-from src.ReceiptProcessor import app
 import re
 
-def testProcessReceipt(morningReceiptData, purchaseTimeIncludedData, simpleReceipt, targetReceipt, errorReceipt):
-    with app.test_client() as client:
+def testProcessReceipt(testApp, morningReceiptData, purchaseTimeIncludedData, simpleReceipt, targetReceipt, errorReceipt):
+    # testApp is created in conftest.py
+    with testApp.test_client() as client:
         # Bad Request - No Request Body
         res = client.post('/receipts/process')
         assert res.status == '400 BAD REQUEST'
@@ -31,30 +31,29 @@ def testProcessReceipt(morningReceiptData, purchaseTimeIncludedData, simpleRecei
         assert re.match(r"^\S+$", res.json['id'])
 
 
-def testGetReceipt(morningReceiptData, purchaseTimeIncludedData, simpleReceipt, targetReceipt):
-    with app.test_client() as client:
+def testGetReceipt(testApp, setUpGetReceipt):
+    # testApp is created in conftest.py
+    # setUpGetReceipt needs to be passed for the "DB" to get populated with data
+    # The mock data can be found in conftest.py setUpGetReceipt method
+    with testApp.test_client() as client:
         # Not Found - No receipts were processed
         res = client.get(f'/receipts/1/points')
         assert res.status == '404 NOT FOUND'
         assert res.text == "No receipt found for that ID."
 
         #Happy Path Tests with Given Test Cases
-        id = client.post('/receipts/process', json = morningReceiptData).json['id']
-        res = client.get(f'/receipts/{id}/points')
+        res = client.get(f'/receipts/2/points')
         assert res.status == '200 OK'
         assert res.json["points"] == 15
 
-        id = client.post('/receipts/process', json = purchaseTimeIncludedData).json['id']
-        res = client.get(f'/receipts/{id}/points')
+        res = client.get(f'/receipts/3/points')
         assert res.status == '200 OK'
         assert res.json["points"] == 109
 
-        id = client.post('/receipts/process', json = simpleReceipt).json['id']
-        res = client.get(f'/receipts/{id}/points')
+        res = client.get(f'/receipts/4/points')
         assert res.status == '200 OK'
         assert res.json["points"] == 31
 
-        id = client.post('/receipts/process', json = targetReceipt).json['id']
-        res = client.get(f'/receipts/{id}/points')
+        res = client.get(f'/receipts/5/points')
         assert res.status == '200 OK'
         assert res.json["points"] == 28

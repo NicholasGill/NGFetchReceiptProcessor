@@ -14,6 +14,7 @@ def processReceipts():
         abort(ErrorResponses.invalidReceiptError())
     errors = ReceiptValidator.Receipt().validate(receiptJson)
     if errors:
+        # This error dict contains info about the validation errors I would log
         abort(ErrorResponses.invalidReceiptError())
     id = ReceiptProcessorAPIHelper.generateIDasString()
     receiptIDMap[id] = receiptJson

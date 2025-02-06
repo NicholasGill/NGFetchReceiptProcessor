@@ -1,13 +1,14 @@
-from src.ReceiptProcessor import app
+from src.ReceiptProcessor import app, receiptIDMap
 import pytest
 import json
 
 #Set up for API tests
 @pytest.fixture()
-def setUp():
+def testApp():
     app.config.update({
         "TESTING": True,
     })
+    return app
 
 @pytest.fixture()
 def morningReceiptData():
@@ -38,3 +39,10 @@ def errorReceipt():
     with open('tests/examples/error-receipt.json') as f:
         errorReceipt = json.load(f)
     return errorReceipt
+
+@pytest.fixture()
+def setUpGetReceipt(morningReceiptData, purchaseTimeIncludedData, simpleReceipt, targetReceipt):
+    receiptIDMap['2'] = morningReceiptData
+    receiptIDMap['3'] = purchaseTimeIncludedData
+    receiptIDMap['4'] = simpleReceipt
+    receiptIDMap['5'] = targetReceipt

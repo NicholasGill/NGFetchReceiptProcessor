@@ -20,7 +20,7 @@ These rules collectively define how many points should be awarded to a receipt.
 
     I took this from the README, but I think it's important.
 '''
-def calculateReceiptPoints(receipt: dict[str, str | list]):
+def calculateReceiptPoints(receipt: dict[str, str | list]) -> int:
     totalPoints = 0
     totalPoints += pointsFromName(receipt["retailer"])
     totalPoints += pointsFromTotalPrice(receipt["total"])
@@ -29,11 +29,11 @@ def calculateReceiptPoints(receipt: dict[str, str | list]):
     totalPoints += pointsFromTime(receipt["purchaseTime"])
     return totalPoints
 
-def pointsFromName(retailerName: str):
+def pointsFromName(retailerName: str) -> int:
     # Names should only be alphanumeric characters
     return len(re.findall('[A-zA-Z0-9]', retailerName))
 
-def pointsFromTotalPrice(totalPrice: str):
+def pointsFromTotalPrice(totalPrice: str) -> int:
     points = 0
     # Format should be guaranteed by validator in processReceipt API endpoint method 
     cents = int(totalPrice[-2:])
@@ -43,7 +43,7 @@ def pointsFromTotalPrice(totalPrice: str):
         points += 25
     return points
 
-def pointsFromItems(items: list):
+def pointsFromItems(items: list) -> int:
     points = 0
     points += (len(items) // 2) * 5
     for item in items:
@@ -54,13 +54,13 @@ def pointsFromItems(items: list):
             points += math.ceil(price * 0.2)
     return points
 
-def pointsFromDate(purchaseDate: str):
+def pointsFromDate(purchaseDate: str) -> int:
     points = 0
     if datetime.strptime(purchaseDate, "%Y-%m-%d").day % 2 == 1:
         points += 6
     return points
 
-def pointsFromTime(purchaseTime: str):
+def pointsFromTime(purchaseTime: str) -> int:
     points = 0
     colonIndex = purchaseTime.index(":")
     timeAsInt = int(purchaseTime[:colonIndex] + purchaseTime[colonIndex + 1:])

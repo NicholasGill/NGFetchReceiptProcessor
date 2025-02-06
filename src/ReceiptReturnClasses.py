@@ -6,4 +6,4 @@ class ReceiptID:
 
 @dataclass
 class Point:
-    points: str
+    points: int

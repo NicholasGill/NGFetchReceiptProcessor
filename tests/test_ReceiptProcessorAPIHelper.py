@@ -4,7 +4,7 @@ import json
 
 # Parent Method for calculating total score of a receipt
 def testCalculateReceiptPoints():
-    with open('tests/examples/purchaseTimeIncluded.json', 'r') as f:
+    with open('tests/testcases/purchaseTimeIncluded.json', 'r') as f:
         Receipt = json.load(f)
     assert calculateReceiptPoints(Receipt) == 109
 

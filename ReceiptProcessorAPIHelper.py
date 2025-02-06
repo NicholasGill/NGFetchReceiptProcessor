@@ -18,7 +18,7 @@ def calculateReceiptPoints(receipt: dict[str, str | list]):
 def pointsFromName(retailerName: str):
     return len(re.findall('[A-zA-Z0-9]', retailerName))
 
-def pointsFromTotalPrice(totalPrice: int):
+def pointsFromTotalPrice(totalPrice: str):
     points = 0
     cents = int(totalPrice[-2:])
     if cents == 0:

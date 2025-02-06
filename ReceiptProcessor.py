@@ -1,7 +1,8 @@
-from flask import Flask, request, Response
-import ReceiptProcessorAPIHelper, ReceiptValidator
-from werkzeug.exceptions import HTTPException, abort
+from flask import Flask, request
+import ReceiptProcessorAPIHelper, ReceiptValidator, ReceiptReturnClasses, ErrorResponses
+from werkzeug.exceptions import abort
 from flask_marshmallow import Marshmallow
+from dataclasses import asdict
 
 app = Flask(__name__)
 ma = Marshmallow(app)
@@ -9,20 +10,19 @@ receiptIDMap = {}
 
 @app.post("/receipts/process")
 def processReceipts():
-    errorResponse = Response("The receipt is invalid.", 400)
     receiptJson = request.get_json(silent=True)
     if receiptJson is None:
-        abort(errorResponse)
+        abort(ErrorResponses.invalidReceiptErr("The receipt is invalid."))
     errors = ReceiptValidator.Receipt().validate(receiptJson)
     if errors:
-        abort(errorResponse)
+        abort(ErrorResponses.invalidReceiptErr("The receipt is invalid."))
     id = ReceiptProcessorAPIHelper.generateIDasString()
-    return {"id": id}
+    receiptIDMap[id] = receiptJson
+    return asdict(ReceiptReturnClasses.ID(id))
 
 @app.get("/receipts/<string:id>/points")
 def getReceiptPointsId(id):
     if receiptIDMap.get(id) is None:
-        abort(Response("No receipt found for that ID.", 404))
+        abort(ErrorResponses.notFoundReceiptErr("No receipt found for that ID."))
     points = ReceiptProcessorAPIHelper.calculateReceiptPoints(receiptIDMap[id])
-    return {"points": points}
-
+    return asdict(ReceiptReturnClasses.Point(points))

@@ -23,8 +23,11 @@ My implementation contains two endpoints,
 
 The endpoints should be available at http://localhost:8080.
 
-If you want to run tests, run `pytest` in the same directory
-
+If you want to run tests, 
+<ol>
+    <li> pip install -r requirements.txt</li>
+    <li> run `pytest` in the same directory</li>
+</ol>
 <h2>Example Curl Commands to Test Endpoints</h2>
 <p>
 Process Receipt Endpoint:

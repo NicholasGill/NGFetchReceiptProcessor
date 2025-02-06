@@ -1,7 +1,9 @@
 from flask import Response
 
-def invalidReceiptErr(errorMessage: str):
-    return Response(errorMessage, 400)
+class invalidReceiptError(Response):
+    def __init__(self):
+        super().__init__("The receipt is invalid.", 400)
 
-def notFoundReceiptErr(errorMessage: str):
-    return Response(errorMessage, 404)
+class notFoundReceiptError(Response):
+    def __init__(self):
+        super().__init__("No receipt found for that ID.", 404)

@@ -25,8 +25,8 @@ The endpoints should be available at http://localhost:8080.
 
 If you want to run tests, 
 <ol>
-    <li> pip install -r requirements.txt</li>
-    <li> run `pytest` in the same directory</li>
+    <li><code>pip install -r requirements.txt</code></li>
+    <li> run <code>pytest</code> in the same directory</li>
 </ol>
 <h2>Example Curl Commands to Test Endpoints</h2>
 <p>
